@@ -1,16 +1,25 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
+<<<<<<< HEAD
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/emailService');
 
 
 const generateVerificationCode = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
+=======
+const { sendVerificationEmail } = require('../utils/emailService');
+
+
+const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 };
 
 
 exports.register = async (req, res) => {
     const {
+<<<<<<< HEAD
         dni,
         nombres,
         apellidoPaterno,
@@ -21,10 +30,23 @@ exports.register = async (req, res) => {
         password,
         direccion,
         distrito,
+=======
+    dni,
+    nombres,
+    apellidoPaterno,
+    apellidoMaterno,
+    fechaNacimiento,
+    telefono,
+    email,
+    password,
+    direccion,
+    distrito,
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
     } = req.body;
 
     try {
 
+<<<<<<< HEAD
         const userExists = await pool.query(
             'SELECT * FROM users WHERE email = $1 OR dni = $2',
             [email, dni]
@@ -44,6 +66,27 @@ exports.register = async (req, res) => {
 
 
         const result = await pool.query( //ussuarioo.
+=======
+    const userExists = await pool.query(
+      'SELECT * FROM users WHERE email = $1 OR dni = $2',
+        [email, dni]
+    );
+
+    if (userExists.rows.length > 0) {
+        return res.status(400).json({ 
+        success: false, 
+        message: 'El correo o DNI ya está registrado' 
+        });
+    }
+
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const verificationCode = generateVerificationCode();//cod veri
+
+
+    const result = await pool.query( //ussuarioo.
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             `INSERT INTO users (
             dni, nombres, apellido_paterno, apellido_materno,
             fecha_nacimiento, telefono, email, password,
@@ -52,6 +95,7 @@ exports.register = async (req, res) => {
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
             RETURNING id, email, nombres`,
             [
+<<<<<<< HEAD
                 dni, nombres, apellidoPaterno, apellidoMaterno,
                 fechaNacimiento, telefono, email, hashedPassword,
                 direccion, distrito,
@@ -74,6 +118,30 @@ exports.register = async (req, res) => {
             success: false,
             message: 'Error al registrar usuario'
         });
+=======
+            dni, nombres, apellidoPaterno, apellidoMaterno,
+            fechaNacimiento, telefono, email, hashedPassword,
+            direccion, distrito,
+            verificationCode, false
+            ]
+        );
+    const newUser = result.rows[0];
+
+
+    await sendVerificationEmail(email, verificationCode, nombres);
+
+    res.status(201).json({
+        success: true,
+        message: 'Usuario registrado. Revisa tu correo para verificar tu cuenta.',
+        userId: newUser.id,
+    });
+    } catch (error) {
+    console.error('Error en registro:', error);
+    res.status(500).json({ 
+        success: false, 
+        message: 'Error al registrar usuario' 
+    });
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
     }
 };
 
@@ -82,6 +150,7 @@ exports.verifyEmail = async (req, res) => {
     const { email, code } = req.body;
 
     try {
+<<<<<<< HEAD
         const result = await pool.query(
             'SELECT * FROM users WHERE email = $1 AND verification_code = $2',
             [email, code]
@@ -109,6 +178,35 @@ exports.verifyEmail = async (req, res) => {
             success: false,
             message: 'Error al verificar email'
         });
+=======
+    const result = await pool.query(
+      'SELECT * FROM users WHERE email = $1 AND verification_code = $2',
+        [email, code]
+    );
+
+    if (result.rows.length === 0) {
+        return res.status(400).json({ 
+        success: false, 
+        message: 'Código de verificación incorrecto' 
+        });
+    }
+
+    await pool.query(
+        'UPDATE users SET email_verified = TRUE, verification_code = NULL WHERE email = $1',
+        [email]
+    );
+
+    res.json({
+        success: true,
+        message: 'Email verificado exitosamente',
+    });
+    } catch (error) {
+    console.error('Error en verificación:', error);
+    res.status(500).json({ 
+        success: false, 
+        message: 'Error al verificar email' 
+    });
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
     }
 };
 
@@ -129,9 +227,15 @@ exports.login = async (req, res) => {//--Log
 
         if (result.rows.length === 0) {
             console.log('Usuario no existe en la BD');
+<<<<<<< HEAD
             return res.status(401).json({
                 success: false,
                 message: 'Credenciales incorrectas'
+=======
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Credenciales incorrectas' 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             });
         }
 
@@ -143,9 +247,15 @@ exports.login = async (req, res) => {//--Log
 
         if (!user.email_verified) {
             console.log('Email no verificado');
+<<<<<<< HEAD
             return res.status(403).json({
                 success: false,
                 message: 'Por favor verifica tu correo electrónico primero'
+=======
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Por favor verifica tu correo electrónico primero' 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             });
         }
 
@@ -155,9 +265,15 @@ exports.login = async (req, res) => {//--Log
 
         if (!isValidPassword) {
             console.log('Contraseña incorrecta');
+<<<<<<< HEAD
             return res.status(401).json({
                 success: false,
                 message: 'Credenciales incorrectas'
+=======
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Credenciales incorrectas' 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             });
         }
 
@@ -185,11 +301,15 @@ exports.login = async (req, res) => {//--Log
                 direccion: user.direccion,
                 distrito: user.distrito,
                 isAdmin: user.is_admin,
+<<<<<<< HEAD
                 reputation: user.reputation,
+=======
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             },
         });
     } catch (error) {
         console.error('Error en login:', error);
+<<<<<<< HEAD
         res.status(500).json({
             success: false,
             message: 'Error al iniciar sesión'
@@ -288,3 +408,11 @@ exports.resetPassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error al restablecer contraseña' });
     }
 };
+=======
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error al iniciar sesión' 
+        });
+    }
+};
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c

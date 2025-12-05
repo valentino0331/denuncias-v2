@@ -52,6 +52,7 @@ const createTables = async () => {
     );
     `);
 
+<<<<<<< HEAD
         await client.query(`
         CREATE TABLE IF NOT EXISTS password_resets (
             id SERIAL PRIMARY KEY,
@@ -62,6 +63,8 @@ const createTables = async () => {
         );
         `);
 
+=======
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
         console.log('Tablas creadas exitosamente');
     } catch (error) {
         console.error('Error creando tablas:', error);

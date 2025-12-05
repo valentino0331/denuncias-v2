@@ -4,4 +4,7 @@ node_modules/
 dist/
 build/
 coverage/
+<<<<<<< HEAD
 *.log
+=======
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c

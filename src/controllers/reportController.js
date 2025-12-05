@@ -1,5 +1,9 @@
 const pool = require('../config/database');
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 const createReport = async (req, res) => {
     const {
         type,
@@ -12,7 +16,11 @@ const createReport = async (req, res) => {
         montoAproximado,
         points,
         exactLocation,
+<<<<<<< HEAD
         imagenes
+=======
+        imagenes 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
     } = req.body;
 
     const userId = req.userId;
@@ -28,9 +36,15 @@ const createReport = async (req, res) => {
             [
                 userId, type, description, date, time, testigos,
                 detallesAdicionales, objetosRobados, montoAproximado,
+<<<<<<< HEAD
                 JSON.stringify(points),
                 exactLocation ? JSON.stringify(exactLocation) : null,
                 imagenes ? JSON.stringify(imagenes) : null
+=======
+                JSON.stringify(points), 
+                exactLocation ? JSON.stringify(exactLocation) : null,
+                imagenes ? JSON.stringify(imagenes) : null 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
             ]
         );
 
@@ -44,11 +58,19 @@ const createReport = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error al crear reporte',
+<<<<<<< HEAD
             error: error.message
+=======
+            error: error.message 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
         });
     }
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 const getAllReports = async (req, res) => {
     try {
         const result = await pool.query(`
@@ -59,8 +81,12 @@ const getAllReports = async (req, res) => {
         u.apellido_materno,
         u.dni,
         u.email,
+<<<<<<< HEAD
         u.telefono,
         u.reputation
+=======
+        u.telefono
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
         FROM reports r 
         JOIN users u ON r.user_id = u.id 
         ORDER BY r.created_at DESC
@@ -72,7 +98,11 @@ const getAllReports = async (req, res) => {
             exact_location: report.exact_location ?
                 (typeof report.exact_location === 'string' ? JSON.parse(report.exact_location) : report.exact_location)
                 : null,
+<<<<<<< HEAD
             imagenes: report.imagenes ?
+=======
+            imagenes: report.imagenes ? 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
                 (typeof report.imagenes === 'string' ? report.imagenes : JSON.stringify(report.imagenes))
                 : null
         }));
@@ -91,6 +121,10 @@ const getAllReports = async (req, res) => {
     }
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 const getUserReports = async (req, res) => {
     const userId = req.userId;
 
@@ -106,7 +140,11 @@ const getUserReports = async (req, res) => {
             exact_location: report.exact_location ?
                 (typeof report.exact_location === 'string' ? JSON.parse(report.exact_location) : report.exact_location)
                 : null,
+<<<<<<< HEAD
             imagenes: report.imagenes ?
+=======
+            imagenes: report.imagenes ? // 
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
                 (typeof report.imagenes === 'string' ? report.imagenes : JSON.stringify(report.imagenes))
                 : null
         }));
@@ -124,6 +162,7 @@ const getUserReports = async (req, res) => {
     }
 };
 
+<<<<<<< HEAD
 const updateReportStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
@@ -196,11 +235,17 @@ const getPublicReports = async (req, res) => {
         });
     }
 };
+=======
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 
 module.exports = {
     createReport,
     getAllReports,
+<<<<<<< HEAD
     getUserReports,
     updateReportStatus,
     getPublicReports
+=======
+    getUserReports
+>>>>>>> e288fa6c41d843b28eca71eb9028e4c97dc6b26c
 };
